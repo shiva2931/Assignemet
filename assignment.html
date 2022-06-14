@@ -1,0 +1,192 @@
+<html>
+
+<head>
+    <style>
+        #mycanvas {
+            border: 1px solid #000;
+            margin-top: 10px;
+            margin-left: 100px;
+        }
+
+        .div1 {
+            float: left;
+        }
+
+        .div2 {
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+
+        img {
+            padding-left: 20px;
+        }
+
+
+        .custom-file-input {
+            color: transparent;
+        }
+
+        .custom-file-input::-webkit-file-upload-button {
+            visibility: hidden;
+        }
+
+        .custom-file-input::before {
+            content: 'Upload Your Photo';
+            color: black;
+            display: inline-block;
+            border: 1px solid #000;
+            cursor: pointer;
+            word-wrap: break-word;
+            height: 50px;
+            width: 48px;
+            white-space: normal;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div class="div1">
+            <canvas id="myCanvas" height="500px" width="500px"></canvas>
+        </div>
+        <div class="div2">
+            <br>
+            <span style="float: left;margin-left: 20px;font-weight: 600;">
+                Step1 - Enter your Photo Width × Height :
+                <input type="text" id="width" size="5" placeholder="W">
+                ×
+                <input type="text" id="height" size="5" placeholder="H">
+            </span>
+            <br>
+            <br>
+            <br>
+            <br>
+            <span style="float: left;margin-left: 20px;font-weight: 600;">
+                Step2 - Choose Your Photo or Upload your own Photo:
+            </span>
+            <br><br>
+            <img src="1.jpg" height="50px" width="80px" id="image1" class="img_inside">
+            <img src="2.jpg" height="50px" width="80px" id="image2" class="img_inside">
+            <img src="3.jpg" height="50px" width="80px" id="image3" class="img_inside">
+            <img src="4.jpg" height="50px" width="80px" id="image4" class="img_inside">
+            <img src="5.jpg" height="50px" width="80px" id="image5" class="img_inside">
+            <input type="hidden" id="hidden_img_id">
+            <input type="hidden" id="hidden_frame_id">
+            <input type="file" class="custom-file-input" id="input" style="width: 50px; float: right;
+                margin-right: 140px;
+                margin-top: 0px;">
+            <br>
+            <br>
+            <span style="float: left;margin-left: 20px;font-weight: 600;">
+                Step3 - Choose Your Photo or Upload your own Photo:
+            </span>
+            <br>
+            <br>
+            <img src="f1.jpg" height="70px" width="100px" id="f1" class="frame_image">
+            <img src="f2.webp" height="70px" width="100px" id="f2" class="frame_image">
+            <img src="f3.jpg" height="70px" width="100px" id="f3" class="frame_image">
+            <img src="f1.jpg" height="70px" width="100px" id="f4" class="frame_image">
+            <img src="f3.jpg" height="70px" width="100px" id="f5" class="frame_image">
+        </div>
+    </div>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    // Canvas intialising
+    var c = document.getElementById("myCanvas");
+    var ctx = c.getContext("2d");
+    ctx.fillStyle = "#FF1493";
+    ctx.fillRect(25, 25, 450, 450);
+
+    // selected image preview in canvas
+    $(document).on("click", ".img_inside", function () {
+        var c = document.getElementById("myCanvas");
+        var ctx = c.getContext("2d");
+        var img_id = $(this).attr('id');
+        $("#hidden_img_id").val(img_id);
+        //var frame_id = $("#hidden_frame_id").val();
+        // if (frame_id) {
+        //     ctx.drawImage(document.getElementById(frame_id), 0, 0, ctx.canvas.width = parseInt(width) + 200, ctx.canvas.height = parseInt(height) + 200);
+        // }
+
+        var width = $("#width").val();
+        var height = $("#height").val();
+        if (width && height) {
+            ctx.canvas.width = parseInt(width) + 200;
+            ctx.canvas.height = parseInt(height) + 200;
+
+            var react_width = parseInt(width) + 150;
+            var react_height = parseInt(height) + 150;
+
+            ctx.fillStyle = "#FF1493";
+            ctx.fillRect(25, 25, react_width, react_height);
+            var img = document.getElementById(img_id);
+            ctx.drawImage(img, 100, 100, width, height);
+
+
+
+        } else {
+            alert("Please input width and height");
+        }
+    });
+
+    // selected frame preview in canvas
+    $(document).on("click", ".frame_image", function () {
+
+        var c = document.getElementById("myCanvas");
+        var ctx = c.getContext("2d");
+
+        var width = $("#width").val();
+        var height = $("#height").val();
+
+        var react_width = parseInt(width) + 150;
+        var react_height = parseInt(height) + 150;
+
+
+        var frame_id = $(this).attr('id');
+
+        $("#hidden_frame_id").val(frame_id);
+        ctx.drawImage(document.getElementById(frame_id), 0, 0, ctx.canvas.width = parseInt(width) + 200, ctx.canvas.height = parseInt(height) + 200);
+
+        ctx.fillStyle = "#FF1493";
+        ctx.fillRect(25, 25, react_width, react_height);
+
+        var hidden_img_id = $("#hidden_img_id").val();
+        var width = $("#width").val();
+        var height = $("#height").val();
+        var img = document.getElementById(hidden_img_id);
+        ctx.drawImage(img, 100, 100, width, height);
+    });
+
+
+
+    // uploaded image preview in canvas
+    var input = document.getElementById('input');
+    input.addEventListener('change', handleFiles);
+    function handleFiles(e) {
+        var c = document.getElementById("myCanvas");
+        var ctx = c.getContext("2d");
+
+        var width = $("#width").val();
+        var height = $("#height").val();
+
+        var react_width = parseInt(width) + 150;
+        var react_height = parseInt(height) + 150;
+        ctx.fillStyle = "#FF1493";
+        ctx.fillRect(25, 25, react_width, react_height);
+        if (width && height) {
+            var img = new Image;
+            img.src = URL.createObjectURL(e.target.files[0]);
+            img.onload = function () {
+                ctx.drawImage(img, 100, 100, width, height);
+            }
+        }
+        else {
+            alert("Please input width and height");
+        }
+    }
+
+</script>
+
+</html>
